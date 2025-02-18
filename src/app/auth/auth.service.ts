@@ -23,4 +23,8 @@ export class AuthService {
   storeToken(token: string) {
     localStorage.setItem('jwt', token);
   }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('token');
+  }
 }

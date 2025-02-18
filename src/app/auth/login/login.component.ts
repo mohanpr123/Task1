@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
-import { JwtResponse } from '../jwt-response.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DashboardComponent } from '../dashboard/dashboard.component';
 
 @Component({
   selector: 'app-login',
@@ -64,7 +65,11 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
   onLogin() {
     if (!this.email) {
       return;
@@ -73,11 +78,12 @@ export class LoginComponent {
     const user = { email: this.email, password: this.password };
     this.authService.login(user).subscribe({
       next: (response) => {
-        console.log('Response received:'); // Log the full response
-        const token = response?.jwt; // Access the token using 'jwt' as the key
+        console.log('Response received:'); // Log the full response in console
+        const token = response?.jwt;
         if (token) {
-          this.authService.storeToken(token); // Store the token in your service
-          alert('Token received: ' + token); // Show the token in the alert
+          this.authService.storeToken(token);
+          this.router.navigate(['/dashboard']);
+          alert('Token received: ' + token);
         } else {
           console.error('JWT not found in response');
         }
