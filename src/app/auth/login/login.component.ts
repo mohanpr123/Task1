@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 // Import Material Modules
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -93,11 +93,7 @@ export class LoginComponent {
 
   message: string = '';
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   onLogin() {
     if (!this.email || !this.password) {
@@ -111,8 +107,8 @@ export class LoginComponent {
         const token = response?.jwt;
         if (token) {
           this.authService.storeToken(token);
-          this.message = 'Login Success Token Received';
           this.router.navigate(['/dashboard']);
+          this.message = 'Login Success Token Received';
         } else {
           console.error('JWT not found in response');
         }
