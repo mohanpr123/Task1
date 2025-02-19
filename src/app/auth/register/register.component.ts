@@ -115,6 +115,7 @@ export class RegisterComponent {
   confirmpassword: string = '';
   passwordMismatch: boolean = false;
   message: string = '';
+  id: number = 0;
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -134,14 +135,17 @@ export class RegisterComponent {
     };
 
     this.authService.register(user).subscribe({
-      next: () => {
-        console.log('Registration done');
+      next: (createdUser) => {
+        this.id = createdUser?.id;
+        console.log(
+          'Registration done ...' + createdUser.username + ' ' + this.id
+        );
         this.message = 'Registration Success';
-        this.router.navigate(['/login']);
+        // this.router.navigate(['/login']);
       },
-      error: () => {
-        this.message = 'Registration failed';
-        console.log('Registration failed');
+      error: (error) => {
+        this.message = error.error || 'Registration failed. Please try again.';
+        console.error('Error response:', error);
       },
     });
   }

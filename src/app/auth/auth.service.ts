@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from './user.model';
 import { JwtResponse } from './jwt-response.model';
+import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +17,8 @@ export class AuthService {
     return this.http.post<JwtResponse>(`${this.apiUrl}/login`, user);
   }
 
-  register(user: User): Observable<JwtResponse> {
-    return this.http.post<JwtResponse>(`${this.apiUrl}/signup`, user);
+  register(user: User): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/signup`, user);
   }
 
   storeToken(token: string) {
