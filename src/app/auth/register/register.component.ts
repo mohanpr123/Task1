@@ -98,8 +98,8 @@ import { MatButtonModule } from '@angular/material/button';
         >
           Register
         </button>
-        <div id="final message">
-          <p *ngIf="message" style="color: red;">
+        <div class="finalMessage">
+          <p *ngIf="message" >
             {{ message }}
           </p>
         </div>

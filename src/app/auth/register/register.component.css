@@ -44,3 +44,7 @@ button {
     width: 90%;
   }
 }
+.finalMessage {
+  text-align: center;
+  color: red;
+}

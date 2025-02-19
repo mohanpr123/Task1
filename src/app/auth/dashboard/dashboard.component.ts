@@ -6,7 +6,7 @@ import { MatButton } from '@angular/material/button';
   selector: 'app-dashboard',
   imports: [MatButton],
   template: `
-    <p>Hey there !!!</p>
+    <p>Hey CALIBRAINERS , heres my Small GIFT 🎁!!!</p>
     <div class="container">
       <button
         mat-raised-button
