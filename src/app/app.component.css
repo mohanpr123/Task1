@@ -1,11 +1,19 @@
 h1 {
   text-align: center;
-  background-color: #444;
-  padding: auto;
-  color: #2a95aa;
+  background-color: #2a2aaf;
+  padding: 20px;
+  color: white;
+  justify-content: left;
 }
 nav {
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 100px;
+}
+a {
+  color: rgb(18, 62, 181);
+  padding: auto;
+  text-align: right;
+  font-size: medium;
+  font-style: italic;
 }

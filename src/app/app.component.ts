@@ -6,11 +6,13 @@ import { RouterOutlet, RouterLink } from '@angular/router';
   standalone: true,
   imports: [RouterOutlet, RouterLink],
   template: `
-    <h1>User Login and Register</h1>
-    <nav>
-      <a routerLink="/login">Login</a>
-      <a routerLink="/register">Register</a>
-    </nav>
+    <h1><i>ANGULAR-APP</i></h1>
+    <h2>
+      <nav>
+        <a routerLink="/login">LOGIN</a>
+        <a routerLink="/register">REGISTER</a>
+      </nav>
+    </h2>
     <router-outlet></router-outlet>
   `,
   styleUrls: ['./app.component.css'],

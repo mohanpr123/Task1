@@ -3,78 +3,106 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
   template: `
-    <h2>Register</h2>
     <div class="register-container">
+      <h2>Register</h2>
       <form (ngSubmit)="onRegister()" class="register-form">
-        <label for="username">Username:</label>
-        <input
-          [(ngModel)]="username"
-          name="username"
-          required
-          placeholder="Enter your username"
-        />
+        <!-- Username -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Username</mat-label>
+          <input matInput [(ngModel)]="username" name="username" required />
+        </mat-form-field>
 
-        <label for="emaill">Email:</label>
-        <input
-          [(ngModel)]="email"
-          #emailInput="ngModel"
-          id="email"
-          name="email"
-          type="email"
-          required
-          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$"
-          placeholder="Enter your email"
-        />
-        <small *ngIf="emailInput.invalid && emailInput.touched">
-          <span *ngIf="emailInput.errors?.['required']"
-            >Email is required.</span
-          >
-          <span *ngIf="emailInput.errors?.['pattern']"
-            >Invalid email format.</span
-          >
-        </small>
+        <!-- Email -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            [(ngModel)]="email"
+            #emailInput="ngModel"
+            name="email"
+            type="email"
+            required
+            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$"
+          />
+          <mat-error *ngIf="emailInput.invalid && emailInput.touched">
+            <span *ngIf="emailInput.errors?.['required']"
+              >Email is required.</span
+            >
+            <span *ngIf="emailInput.errors?.['pattern']"
+              >Invalid email format.</span
+            >
+          </mat-error>
+        </mat-form-field>
 
-        <label for="password">Password:</label>
-        <input
-          [(ngModel)]="password"
-          #passwordInput="ngModel"
-          id="password"
-          name="password"
-          type="password"
-          required
-          pattern="^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$"
-          placeholder="Enter your password"
-        />
+        <!-- Password -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [(ngModel)]="password"
+            #passwordInput="ngModel"
+            name="password"
+            type="password"
+            required
+            pattern="^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"
+          />
+          <mat-error *ngIf="passwordInput.invalid && passwordInput.touched">
+            <span *ngIf="passwordInput.errors?.['required']"
+              >Password is required.</span
+            >
+            <span *ngIf="passwordInput.errors?.['pattern']">
+              Password must be at least 8 characters, including letters and
+              numbers.
+            </span>
+          </mat-error>
+        </mat-form-field>
 
-        <small *ngIf="passwordInput.invalid && passwordInput.touched">
-          <span *ngIf="passwordInput.errors?.['required']"
-            >Password is required.</span
-          >
-          <span *ngIf="passwordInput.errors?.['pattern']">
-            Password must be at least 8 characters, include letters and numbers.
-          </span>
-        </small>
-        <label for="confirmPassword">Confirm Password:</label>
-        <input
-          [(ngModel)]="confirmpassword"
-          (ngModelChange)="checkPasswords()"
-          name="confirmPassword"
-          type="password"
-          required
-          placeholder="Confirm your password"
-        />
+        <!-- Confirm Password -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Confirm Password</mat-label>
+          <input
+            matInput
+            [(ngModel)]="confirmpassword"
+            (ngModelChange)="checkPasswords()"
+            name="confirmPassword"
+            type="password"
+            required
+          />
+          <mat-error *ngIf="passwordMismatch">
+            Passwords do not match.
+          </mat-error>
+        </mat-form-field>
 
-        <div *ngIf="passwordMismatch" class="error-message">
-          Passwords do not match.
+        <!-- Register Button -->
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="full-width"
+          [disabled]="passwordInput.invalid"
+        >
+          Register
+        </button>
+        <div id="final message">
+          <p *ngIf="message" style="color: red;">
+            {{ message }}
+          </p>
         </div>
-
-        <button type="submit">Register</button>
       </form>
     </div>
   `,
@@ -86,6 +114,7 @@ export class RegisterComponent {
   password: string = '';
   confirmpassword: string = '';
   passwordMismatch: boolean = false;
+  message: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -95,7 +124,6 @@ export class RegisterComponent {
 
   onRegister() {
     if (this.passwordMismatch) {
-      alert('Password do not match');
       return;
     }
 
@@ -106,20 +134,15 @@ export class RegisterComponent {
     };
 
     this.authService.register(user).subscribe({
-      next: (Response) => {
+      next: () => {
         console.log('Registration done');
+        this.message = 'Registration Success';
         this.router.navigate(['/login']);
       },
-      error: (error) => {
+      error: () => {
+        this.message = 'Registration failed';
         console.log('Registration failed');
       },
     });
-
-    //   () => {
-    //     this.router.navigate(['/login']);
-    //   },
-    //   (error) => {
-    //     console.error('Registration failed', error);
-    //   }
   }
 }
