@@ -27,13 +27,14 @@ public class SignupController {
     @PostMapping
     public ResponseEntity<?> signup(@RequestBody SignupRequest signupRequest)
     {
-        User createdUser = authService.createUser(signupRequest);
-        if(createdUser!=null)
-        {
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        try {
+            User createdUser = authService.createUser(signupRequest);
+//            if (createdUser != null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create");
-        }
+
     }
 }
