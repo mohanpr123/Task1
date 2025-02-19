@@ -27,14 +27,21 @@ public class SignupController {
     @PostMapping
     public ResponseEntity<?> signup(@RequestBody SignupRequest signupRequest)
     {
-        try {
-            User createdUser = authService.createUser(signupRequest);
-//            if (createdUser != null) {
-                return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+//        try {
+//            User createdUser = authService.createUser(signupRequest);
+//                return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+//        }
+        User createdUser = authService.createUser(signupRequest);
+        if(createdUser!=null)
+        {
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
         }
-
+        else
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User Already Exists");
+        }
     }
 }
