@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { SnackbarService } from '../../snackbar.service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +20,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSnackBarModule,
   ],
   template: `
     <div class="login-container">
@@ -93,7 +96,11 @@ export class LoginComponent {
 
   message: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private snackBarService: SnackbarService
+  ) {}
 
   onLogin() {
     if (!this.email || !this.password) {
@@ -107,13 +114,19 @@ export class LoginComponent {
         const token = response?.jwt;
         if (token) {
           this.authService.storeToken(token);
-          this.router.navigate(['/dashboard']);
+          this.snackBarService.showMessage('Login Success', 'OK', 3000);
           this.message = 'Login Success';
+          this.router.navigate(['/dashboard']);
         } else {
           console.error('JWT not found in response');
         }
       },
       error: (error) => {
+        this.snackBarService.showMessage(
+          'Login Failed' + error.error,
+          'OK',
+          3000
+        );
         this.message = 'Invalid Credentials';
         console.error('Login failed', error);
       },

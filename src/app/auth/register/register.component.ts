@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { SnackbarService } from '../../snackbar.service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSnackBarModule,
   ],
   template: `
     <div class="register-container">
@@ -99,7 +102,7 @@ import { MatButtonModule } from '@angular/material/button';
           Register
         </button>
         <div class="finalMessage">
-          <p *ngIf="message" >
+          <p *ngIf="message">
             {{ message }}
           </p>
         </div>
@@ -117,7 +120,11 @@ export class RegisterComponent {
   message: string = '';
   id: number = 0;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private snackBarService: SnackbarService
+  ) {}
 
   checkPasswords() {
     this.passwordMismatch = this.confirmpassword !== this.password;
@@ -140,11 +147,13 @@ export class RegisterComponent {
         console.log(
           'Registration done ...' + createdUser.username + ' ' + this.id
         );
+        this.snackBarService.showMessage('Registration Success', 'OK', 3000);
         this.message = 'Registration Success';
-        // this.router.navigate(['/login']);
+        this.router.navigate(['/login']);
       },
       error: (error) => {
         this.message = error.error || 'Registration failed. Please try again.';
+        this.snackBarService.showMessage('Registration Failed', 'OK', 3000);
         console.error('Error response:', error);
       },
     });
