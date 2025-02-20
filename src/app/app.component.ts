@@ -1,18 +1,32 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
   template: `
-    <h1><i>ANGULAR-APP</i></h1>
-    <h2>
+    <mat-toolbar color="primary">
+      <span class="title"> ANGULAR-APP </span>
+      <span class="spacer"></span>
       <nav>
-        <a routerLink="/login">LOGIN</a>
-        <a routerLink="/register">REGISTER</a>
+        <button mat-button routerLink="/login">
+          <mat-icon>login</mat-icon> LOGIN
+        </button>
+        <button mat-button routerLink="/register">
+          <mat-icon>person_add</mat-icon> REGISTER
+        </button>
       </nav>
-    </h2>
+    </mat-toolbar>
     <router-outlet></router-outlet>
   `,
   styleUrls: ['./app.component.css'],

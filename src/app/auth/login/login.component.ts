@@ -108,14 +108,13 @@ export class LoginComponent {
         if (token) {
           this.authService.storeToken(token);
           this.router.navigate(['/dashboard']);
-          this.message = 'Login Success Token Received';
+          this.message = 'Login Success';
         } else {
           console.error('JWT not found in response');
         }
       },
       error: (error) => {
         this.message = 'Invalid Credentials';
-        // alert('Invalid Credentials');
         console.error('Login failed', error);
       },
     });
